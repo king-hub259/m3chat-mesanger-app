@@ -1,4 +1,4 @@
-package messaging.sngine.app
+package com.messaging.sngine.app
 
 import io.flutter.embedding.android.FlutterActivity
 
