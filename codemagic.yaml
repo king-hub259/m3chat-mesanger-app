@@ -1,14 +1,13 @@
-
 workflows:
-  ios-testflight:
-    name: Build for TestFlight
+  ios-device:
+    name: Build iOS for iPhone
     max_build_duration: 120
     instance_type: mac_mini_m2
     environment:
-      groups:
-        - app_store_connect
+      groups: []
       flutter: stable
       xcode: latest
+      cocoapods: default
     scripts:
       - name: Flutter Setup
         script: |
@@ -16,17 +15,17 @@ workflows:
           flutter clean
           flutter pub get
       
-      - name: Build for TestFlight
+      - name: Install iOS Dependencies
         script: |
-          flutter build ipa --release --export-options-plist=ios/ExportOptions.plist
+          cd ios
+          pod install --repo-update
+      
+      - name: Build iOS IPA
+        script: |
+          flutter build ipa --debug --no-codesign
     artifacts:
       - build/ios/ipa/*.ipa
     publishing:
-      app_store_connect:
-        api_key: $APP_STORE_CONNECT_PRIVATE_KEY
-        key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
-        issuer_id: $APP_STORE_CONNECT_ISSUER_ID
-        submit_to_testflight: true
       email:
         recipients:
           - michealige080@gmail.com
