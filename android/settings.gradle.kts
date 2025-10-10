@@ -19,4 +19,4 @@ include(":app")
 
 // Load the Flutter module automatically
 setBinding(bindings)
-evaluate(File(settingsDir.parentFile, "flutter_module/.android/include_flutter.groovy"))
+evaluate(new File(settingsDir.parentFile, "flutter_module/.android/include_flutter.groovy"))
