@@ -23,8 +23,17 @@ workflows:
       - name: Build iOS IPA
         script: |
           flutter build ipa --debug --no-codesign
+      
+      - name: Package Artifacts
+        script: |
+          # Ensure the IPA is available and properly located
+          mkdir -p build/artifacts
+          cp -R build/ios/ipa/*.ipa build/artifacts/ 2>/dev/null || echo "No IPA files found"
+          ls -la build/ios/ipa/
     artifacts:
       - build/ios/ipa/*.ipa
+      - build/artifacts/**/*
+      - /tmp/xcodebuild_logs/*.log
     publishing:
       email:
         recipients:
