@@ -1,34 +1,12 @@
-workflows:
-  android-app:
-    name: Build Android APK
-    max_build_duration: 60
-    instance_type: mac_mini_m2
-    environment:
-      groups: []
-      flutter: stable
-    scripts:
-      - name: Flutter Setup
-        script: |
-          flutter doctor -v
-          flutter clean
-          flutter pub get
-      
-      - name: Build Android APK
-        script: |
-          flutter build apk --debug
-    artifacts:
-      - build/app/outputs/flutter-apk/*.apk
-    publishing:
-      email:
-        recipients:
-          - michealige080@gmail.com
 
-  ios-simulator:
-    name: Build iOS Simulator
-    max_build_duration: 60
+workflows:
+  ios-testflight:
+    name: Build for TestFlight
+    max_build_duration: 120
     instance_type: mac_mini_m2
     environment:
-      groups: []
+      groups:
+        - app_store_connect
       flutter: stable
       xcode: latest
     scripts:
@@ -38,12 +16,17 @@ workflows:
           flutter clean
           flutter pub get
       
-      - name: Build for iOS Simulator
+      - name: Build for TestFlight
         script: |
-          flutter build ios --simulator --debug
+          flutter build ipa --release --export-options-plist=ios/ExportOptions.plist
     artifacts:
-      - build/ios/iphonesimulator/Runner.app
+      - build/ios/ipa/*.ipa
     publishing:
+      app_store_connect:
+        api_key: $APP_STORE_CONNECT_PRIVATE_KEY
+        key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
+        issuer_id: $APP_STORE_CONNECT_ISSUER_ID
+        submit_to_testflight: true
       email:
         recipients:
           - michealige080@gmail.com
