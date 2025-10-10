@@ -1,11 +1,11 @@
 workflows:
   android-app:
-    name: Build Android App
+    name: Build Android APK
     max_build_duration: 60
     instance_type: mac_mini_m2
     environment:
       groups: []
-      flutter: stable  # This is crucial - tells Codemagic it's a Flutter project
+      flutter: stable
     scripts:
       - name: Flutter Setup
         script: |
@@ -18,6 +18,31 @@ workflows:
           flutter build apk --debug
     artifacts:
       - build/app/outputs/flutter-apk/*.apk
+    publishing:
+      email:
+        recipients:
+          - michealige080@gmail.com
+
+  ios-simulator:
+    name: Build iOS Simulator
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+    environment:
+      groups: []
+      flutter: stable
+      xcode: latest
+    scripts:
+      - name: Flutter Setup
+        script: |
+          flutter doctor -v
+          flutter clean
+          flutter pub get
+      
+      - name: Build for iOS Simulator
+        script: |
+          flutter build ios --simulator --debug
+    artifacts:
+      - build/ios/iphonesimulator/Runner.app
     publishing:
       email:
         recipients:
