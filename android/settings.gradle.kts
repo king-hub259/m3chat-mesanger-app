@@ -1,5 +1,3 @@
-// android/settings.gradle.kts
-
 pluginManagement {
     repositories {
         google()
@@ -19,5 +17,6 @@ dependencyResolutionManagement {
 rootProject.name = "m3chat_messenger_app"
 include(":app")
 
-// Apply Flutter configuration
-apply(from = File("../flutter_settings.gradle"))
+// Load the Flutter module automatically
+setBinding(bindings)
+evaluate(File(settingsDir.parentFile, "flutter_module/.android/include_flutter.groovy"))
