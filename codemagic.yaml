@@ -4,20 +4,20 @@ workflows:
     max_build_duration: 60
     instance_type: mac_mini_m2
     environment:
-      vars:
-        GRADLE_TASK: "assembleDebug"
+      groups: []
+      flutter: stable  # This is crucial - tells Codemagic it's a Flutter project
     scripts:
-      - name: Generate Gradle Wrapper
+      - name: Flutter Setup
         script: |
-          gradle wrapper
-      - name: Set Gradle wrapper permission
-        script: |
-          chmod +x ./gradlew
+          flutter doctor -v
+          flutter clean
+          flutter pub get
+      
       - name: Build Android APK
         script: |
-          ./gradlew $GRADLE_TASK
+          flutter build apk --debug
     artifacts:
-      - app/build/outputs/**/*.apk
+      - build/app/outputs/flutter-apk/*.apk
     publishing:
       email:
         recipients:
