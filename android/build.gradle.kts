@@ -14,7 +14,6 @@ buildscript {
     dependencies {
         classpath("com.android.tools.build:gradle:8.5.2")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.25")
-        classpath("dev.flutter:flutter-gradle-plugin:1.0.0")
     }
 }
 
