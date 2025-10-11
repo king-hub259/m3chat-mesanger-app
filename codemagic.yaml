@@ -1,6 +1,6 @@
 workflows:
-  ios-simulator:
-    name: Build iOS Simulator
+  ios-framework:
+    name: Build iOS Framework
     max_build_duration: 60
     instance_type: mac_mini_m2
     environment:
@@ -14,11 +14,17 @@ workflows:
           flutter clean
           flutter pub get
       
-      - name: Build for iOS Simulator
+      - name: Build iOS Framework
         script: |
-          flutter build ios --simulator --debug
+          flutter build ios --debug --no-codesign
+          
+      - name: Create Archive
+        script: |
+          cd build/ios
+          zip -r ios-build.zip . -i "*.app" "*.xcarchive" "*.framework"
     artifacts:
-      - build/ios/iphonesimulator/Runner.app
+      - build/ios/ios-build.zip
+      - build/ios/iphoneos/*.app
     publishing:
       email:
         recipients:
