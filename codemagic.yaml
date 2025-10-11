@@ -1,13 +1,12 @@
 workflows:
-  ios-device:
-    name: Build iOS for iPhone
-    max_build_duration: 120
+  ios-simulator:
+    name: Build iOS Simulator
+    max_build_duration: 60
     instance_type: mac_mini_m2
     environment:
       groups: []
       flutter: stable
       xcode: latest
-      cocoapods: default
     scripts:
       - name: Flutter Setup
         script: |
@@ -15,25 +14,11 @@ workflows:
           flutter clean
           flutter pub get
       
-      - name: Install iOS Dependencies
+      - name: Build for iOS Simulator
         script: |
-          cd ios
-          pod install --repo-update
-      
-      - name: Build iOS IPA
-        script: |
-          flutter build ipa --debug --no-codesign
-      
-      - name: Package Artifacts
-        script: |
-          # Ensure the IPA is available and properly located
-          mkdir -p build/artifacts
-          cp -R build/ios/ipa/*.ipa build/artifacts/ 2>/dev/null || echo "No IPA files found"
-          ls -la build/ios/ipa/
+          flutter build ios --simulator --debug
     artifacts:
-      - build/ios/ipa/*.ipa
-      - build/artifacts/**/*
-      - /tmp/xcodebuild_logs/*.log
+      - build/ios/iphonesimulator/Runner.app
     publishing:
       email:
         recipients:
